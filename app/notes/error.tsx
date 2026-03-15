@@ -1,39 +1,9 @@
-// app/notes/error.tsx
-
-// "use client";
-
-// type Props = {
-//   error: Error;
-// };
-
-// const Error = ({ error }: Props) => {
-//   return (
-//     <div>
-//       <h2>Помилка при завантаженні</h2>
-//       <p>{error.message}</p>
-//     </div>
-//   );
-// };
-
-// export default Error;
-
-// app/notes/error.tsx
-
 "use client";
 
 type Props = {
-  error: Error;
-  reset: () => void;
+  error: Error & { digest?: string };
 };
 
-const Error = ({ error, reset }: Props) => {
-  return (
-    <div>
-      <h2>Помилка при завантаженні</h2>
-      <p>{error.message}</p>
-      <button onClick={reset}>Спробувати знову</button>
-    </div>
-  );
-};
-
-export default Error;
+export default function NotesError({ error }: Props) {
+  return <p>Could not fetch the list of notes. {error.message}</p>;
+}

@@ -1,4 +1,3 @@
-// components/Header/Header.tsx
 import css from "./Header.module.css";
 import Link from "next/link";
 
@@ -8,19 +7,17 @@ const Header = () => {
       <Link href="/" aria-label="Home">
         NoteHub
       </Link>
-      <nav>
+      <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/" aria-label="Home">
+              Home
+            </Link>
           </li>
           <li>
-            <Link href="/notes">Notes</Link>
-          </li>
-          <li>
-            <Link href="/profile">Profile</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
+            <Link href="/notes" aria-label="Notes">
+              Notes
+            </Link>
           </li>
         </ul>
       </nav>

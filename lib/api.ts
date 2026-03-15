@@ -1,42 +1,53 @@
-// lib/api.ts
-
 import axios from "axios";
+import type { Note, NoteTag } from "@/types/note";
 
-export type Note = {
-  id: string;
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+export interface CreateNoteProps {
   title: string;
   content: string;
-  categoryId: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  tag: NoteTag;
+}
+
+const START_URL = "https://notehub-public.goit.study/api";
+const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+
+const noteHubApi = axios.create({
+  baseURL: START_URL,
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+  },
+});
+
+export const fetchNotes = async (
+  page: number,
+  search = "",
+): Promise<FetchNotesResponse> => {
+  const response = await noteHubApi.get<FetchNotesResponse>("/notes", {
+    params: {
+      page,
+      perPage: 12,
+      search,
+    },
+  });
+
+  return response.data;
 };
 
-export type NoteListResponse = {
-  notes: Note[];
-  total: number;
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const response = await noteHubApi.get<Note>(`/notes/${id}`);
+  return response.data;
 };
 
-axios.defaults.baseURL = "https://next-v1-notes-api.goit.study";
-
-// export const getNotes = async () => {
-//   const res = await axios.get<NoteListResponse>("/notes");
-//   return res.data;
-// };
-
-// lib/api.ts
-
-// Решта коду файла
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const getNotes = async () => {
-  await delay(2000);
-  const res = await axios.get<NoteListResponse>("/notes");
-  return res.data;
+export const createNote = async (newNote: CreateNoteProps): Promise<Note> => {
+  const response = await noteHubApi.post<Note>("/notes", newNote);
+  return response.data;
 };
 
-export const getSingleNote = async (id: string) => {
-  const res = await axios.get<Note>(`/notes/${id}`);
-  return res.data;
+export const deleteNote = async (id: string): Promise<Note> => {
+  const response = await noteHubApi.delete<Note>(`/notes/${id}`);
+  return response.data;
 };
